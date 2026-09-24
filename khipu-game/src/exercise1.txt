@@ -1,0 +1,1 @@
+In this exercise, represent the number 203 on a khipu! Use only one cord.
