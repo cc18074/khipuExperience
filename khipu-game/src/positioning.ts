@@ -72,8 +72,8 @@ export function createCord(cordTexture: Texture, x: number, y: number,
 export function createKnot(texture: Texture, x: number, y: number,
    stageArea: Container){
         const knotSprite = new Sprite(texture);
-        knotSprite.width = 30;
-        knotSprite.height = 30;
+        knotSprite.width = 50;
+        knotSprite.height = 60;
         knotSprite.position.set(x,y);
         knotSprite.eventMode='static';
         knotSprite.cursor = 'pointer';

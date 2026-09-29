@@ -1,4 +1,4 @@
-import { Sprite } from "pixi.js";
+import { Sprite, Container } from "pixi.js";
 
 class Node {
     spriteVal: Sprite;
@@ -37,7 +37,7 @@ export class DoublyLinkedList {
     this.length++;
     }
 
-    pop(){
+    pop(container: Container){
         if(!this.tail){
             return null;
         }
@@ -52,6 +52,8 @@ export class DoublyLinkedList {
             removedNode.prev = null;
         }
         this.length--;
+        container.removeChild(removedNode.sprite);
+        console.log("pop called");
     }
 }
 

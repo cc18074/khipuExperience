@@ -11,7 +11,9 @@ import { Application, Assets,
   TextureSource} from "pixi.js";
 
 import { createCord, showNumberPlaces, createKnot, alignKnots } from "./positioning";
-import { makeKhipu, makeDigitMenu, drawBackground, drawNumPlaces, drawLineGuide, makeCheckAnswerButton, drawTextBox, drawMenuGuide } from "./drawing";
+import { makeKhipu, makeDigitMenu, drawBackground, drawNumPlaces, drawLineGuide, makeCheckAnswerButton, drawTextBox, drawMenuGuide,
+  drawLlamas
+ } from "./drawing";
 import { DoublyLinkedList } from "./DoublyLinkedList";
 
 interface SpriteType extends Sprite {
@@ -47,7 +49,9 @@ const texturePaths = [
 'assets/exit.png',
 'assets/noProgressCord.png',
 'assets/hintSprite.png',
-'assets/undoButton.png'
+'assets/undoButton.png',
+'assets/llama.png',
+'assets/demoCorrectAnswer.png'
 ]
 
 const textures = await Assets.load(texturePaths);
@@ -55,7 +59,7 @@ const knotList = new DoublyLinkedList();
 const exerciseTextData = await Assets.load('/src/exercise1.txt');
 
 let khipuCount = 0;
-let targetNum = 203;
+let targetNum = 6;
 let selectedSprite: string | null = null;
 
 
@@ -98,18 +102,6 @@ const gameState = {
   digitKnotNum: 1
 }
 
-function correctAnswer(container: Container){
-   const winnerText = new Text({
-      text:'Correct, good job!',
-      style: {
-        fontFamily: 'IBMFont',
-        fontSize: 36
-      }
-    })
-    winnerText.x = 500;
-    winnerText.y = 300;
-    container.addChild(winnerText);
-}
 
 
 // Creating the initial game stage
@@ -187,8 +179,9 @@ drawNumPlaces(khipuContainer);
 exerciseDesc.addChild(khipuCounter);
 
 
+
   const khipuHitbox = new Graphics();
-  khipuHitbox.rect(330, 150, 615, 275);
+  khipuHitbox.rect(310, 150, 650, 275);
   khipuHitbox.fill('yellow');
   khipuHitbox.eventMode = 'static';
   khipuHitbox.alpha = 0;
@@ -253,7 +246,7 @@ container.addChild(progressKnot);
 const observeText = new Text({
   text: "I.  Observe",
   style: {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'IBMFont'
   }
 });
@@ -264,7 +257,7 @@ container.addChild(observeText);
 const practiceText = new Text({
   text: "II.  Practice",
   style: {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'IBMFont'
   }
 });
@@ -276,7 +269,7 @@ container.addChild(practiceText);
 const designText = new Text({
   text: "III.  Design",
   style: {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'IBMFont'
   }
 });
@@ -288,7 +281,7 @@ container.addChild(designText);
 const interpretText = new Text({
   text: "IV.  Interpret",
   style: {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'IBMFont'
   }
 });
@@ -299,6 +292,12 @@ container.addChild(interpretText);
 drawTextBox(textures['assets/textBox.png'], exerciseDesc);
 exerciseDesc.addChild(exerciseText);
 drawMenuGuide(textures['assets/menuoptions.png'], container);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 650, 50);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 695, 55);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 750, 39);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 820, 32);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 860, 58);
+drawLlamas(textures['assets/llama.png'], exerciseDesc, 910, 37);
 
 const numToTextureMap = new Map();
 numToTextureMap.set(2, textures['assets/2digit.png']);
@@ -410,6 +409,10 @@ numToTextureMap.set(9, textures['assets/9digit.png']);
     }
   })
 
+  undoButtonSprite.on('pointerdown', (event) => {
+    knotList.pop(khipuHitbox);
+  })
+
 
 // last thing to do.. if checkscore is good, update game state to win, and
 // evaluate (call a render function?)
@@ -443,13 +446,11 @@ numToTextureMap.set(9, textures['assets/9digit.png']);
   guideClick(container, app);
   hintClick(container, app);
   
-}
 
-
-function checkScore(targetNum: number, container: Container, 
+  function checkScore(targetNum: number, container: Container, 
   compareCount: number){
     if (khipuCount == targetNum){
-     correctAnswer(container);
+     correctAnswer(container, app);
     }
 
     if (khipuCount > targetNum){
@@ -459,6 +460,36 @@ function checkScore(targetNum: number, container: Container,
     container.addChild(tryAgain);
     }
 }
+
+function correctAnswer(container: Container, app: Application){
+  const correctDemoSprite = new Sprite(textures['assets/demoCorrectAnswer.png']);
+   const winnerText = new Text({
+      text:'Correct, good job!',
+      style: {
+        fontFamily: 'IBMFont',
+        fontSize: 36
+      }
+    })
+
+    winnerText.x = 500;
+    winnerText.y = 300;
+  //   correctDemoSprite.width = 700;
+  //   correctDemoSprite.height = 350;
+
+  // const overlay = new Graphics();
+  // overlay.rect(0, 0, app.screen.width, app.screen.height);
+  // overlay.fill('#000000');
+  // overlay.alpha = 0.50;
+
+  // khipuContainer.addChild(overlay);
+  // khipuContainer.addChild(correctDemoSprite);
+  container.addChild(winnerText);
+}
+
+
+}
+
+
 
 function updateCount(y: number, knotValue: number){
   if (y < 200){

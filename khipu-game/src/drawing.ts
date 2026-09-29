@@ -112,7 +112,7 @@ export async function drawLineGuide(app: Application, container: Container){
 }
 
 export function makeCheckAnswerButton(texture: Texture, container: Container) {
-   const checkAnswerButton = new Sprite(texture);
+ const checkAnswerButton = new Sprite(texture);
  checkAnswerButton.x = 950;
  checkAnswerButton.y = 550;
  checkAnswerButton.width = 180;
@@ -136,8 +136,17 @@ textBox.y = 25;
 export function drawMenuGuide(texture: Texture, container: Container){
   const menuSprite = new Sprite(texture);
   container.addChild(menuSprite);
-  menuSprite.height = 300;
-  menuSprite.width = 50;
+  menuSprite.height = 360;
+  menuSprite.width = 60;
   menuSprite.x = 1175;
   menuSprite.y = 40;
+}
+
+export function drawLlamas(texture: Texture, container: Container, x: number, y: number){
+  const llamaSprite = new Sprite(texture);
+  llamaSprite.x = x;
+  llamaSprite.y = y;
+  llamaSprite.width = 50;
+  llamaSprite.height = 50;
+  container.addChild(llamaSprite);
 }

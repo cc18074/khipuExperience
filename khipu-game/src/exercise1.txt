@@ -1,1 +1,2 @@
-In this exercise, represent the number 203 on a khipu! Use only one cord.
+In this exercise, count the six llamas
+on the screen!
